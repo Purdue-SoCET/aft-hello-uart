@@ -1,20 +1,14 @@
-# riscv-hello-uart
-Minimal bare-metal RISC-V assembly code with UART output for execution in QEMU
-
-## Requirements
-### Tools:
-- riscv64-unknown-elf-gcc
-- riscv64-unknown-elf-ld
-- riscv64-unknown-elf-objcopy
+# aft-hello-uart
+Fork of riscv-hello-uart
+M/S-mode RISC-V assembly code with UART output for execution in AFTx07. Used for basic print to magic address (0xB0000000) testing.
+Comment out mret to run in M-mode, else it runs in S-mode.
 
 ### Building:
-Make
+make meminit
 
-### Execution:
-qemu-system-riscv64
+### Cleaning:
+make clean
 
-## Building
-make all
-
-## Running
-make run
+### Running:
+Run with Vaftx07 executable.
+Vaftx07 meminit.bin
