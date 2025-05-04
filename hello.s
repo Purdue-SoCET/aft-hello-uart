@@ -3,16 +3,26 @@
 
 _start: # Program starts here
     csrr    t1, mstatus
-    li      t2, 0xFFFFE7FF        # clear MPP bits
+    li      t2, 0xFFFFE7FF        # Clear MPP bits
     and     t1, t1, t2
-    li      t2, 0x00000800        # set MPP to S-mode for mret
+    li      t2, 0x00000800        # Set MPP to S-mode for mret
     or      t1, t1, t2
     csrw    mstatus, t1
 
     la      t0, _sstart
-    csrw    mepc, t0
+    csrw    mepc, t0              # So that it jumps to this address on mret
 
-    mret
+    li      t0, 0xB0000000 >> 2   # Allow writes to UART at 0xB0000000
+    csrw    pmpaddr0, t0
+    li      t0, 0xF
+    csrw    pmpcfg0, t0
+
+    li      t0, (0x0 | 0xFFF) >> 2 # Permit S-mode to run _sstart
+    csrw    pmpaddr1, t0
+    li      t0, 0xD
+    csrw    pmpcfg1, t0
+
+    mret # NOTE: Comment this out to enable M-mode UART print
 
 _sstart: # S-mode (or not)
     # prepare for the loop
